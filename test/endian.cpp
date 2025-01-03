@@ -121,7 +121,7 @@ printf("main_socket: %p\n", _i_main_socket);
     return 0;
 }
 
-void Endian::_proc_endian() {
+void Endian::_proc() {
     ReactorEvent re;
     bool fre = false;
     while ( !_stop_flag ) {
@@ -182,9 +182,7 @@ int Endian::l_start() {
     }
 
     for (int i = 0; i < tn; ++i) {
-        RUN_TASK(std::function<void()>(
-            std::bind(&Endian::_proc_endian, this)
-        ));
+        RUN_PROC( this );
     }
 
     if ( _i_main_socket->listen() < 0 ) {
@@ -209,9 +207,7 @@ int Endian::r_start() {
     }
 
     for (int i = 0; i < tn; ++i) {
-        RUN_TASK(std::function<void()>(
-            std::bind(&Endian::_proc_endian, this)
-        ));
+        RUN_PROC( this );
     }
     return 0;
 }

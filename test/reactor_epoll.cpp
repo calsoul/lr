@@ -70,10 +70,7 @@ int ReactorEpoll::init() {
 }
 
 int ReactorEpoll::start() {
-    RUN_TASK(std::function<void()>(
-        std::bind(&ReactorEpoll::_proc_reactor, this)
-    ));
-
+    RUN_PROC( this );
     return 0;
 }
 
@@ -101,7 +98,7 @@ int ReactorEpoll::del_socket(Socket *s) {
 
 }
 
-void ReactorEpoll::_proc_reactor() {
+void ReactorEpoll::_proc() {
     while ( !_stop_flag ) {
         if ( r_proc() < 0 ) {
             break;

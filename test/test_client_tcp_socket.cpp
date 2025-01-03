@@ -122,14 +122,15 @@ printf("server addr: %s:%d\n", ai._ip.c_str(), ai._port);
         return -1;
     }
 
+    RUN_PROC(proc_recv, (void *)&ts);
+    //RUN_TASK(std::function<void(void *)>(
+    //    std::bind(&proc_recv, std::placeholders::_1)
+    //), (void *)&ts);
 
-    RUN_TASK(std::function<void(void *)>(
-        std::bind(&proc_recv, std::placeholders::_1)
-    ), (void *)&ts);
-
-    RUN_TASK(std::function<void(void *)>(
-        std::bind(&proc_send, std::placeholders::_1)
-    ), (void *)&ts);
+    RUN_PROC(proc_send, (void *)&ts);
+    //RUN_TASK(std::function<void(void *)>(
+    //    std::bind(&proc_send, std::placeholders::_1)
+    //), (void *)&ts);
 
     //RUN_TASK(std::function<void(void *)>(
     //    std::bind(&proc, std::placeholders::_1)

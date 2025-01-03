@@ -26,7 +26,7 @@ public:
   
     int start();
   
-    void _proc_endian();
+    void _proc();
   
     int fire();
 

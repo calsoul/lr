@@ -1,18 +1,41 @@
 #ifndef _THREAD_MANAGER_H__
 #define _THREAD_MANAGER_H__
 
-#include <functional>
 #include <list>
 #include <mutex>
 #include <thread>
 
-#define RUN_TASK THREAD_MANAGER.run_task
+#define RUN_PROC THREAD_MANAGER.run_proc
+
+typedef void(*p_void_void)(void);
+typedef void(*p_void_int)(int);
+typedef void(*p_void_pvoid)(void*);
 
 class ThreadManager {
 public:
-    int run_task(std::function<void()> func, bool detach = false);
-    int run_task(std::function<void(int)> func, int i, bool detach = false);
-    int run_task(std::function<void(void*)> func, void *v, bool detach = false);
+
+    void run_proc(p_void_int proc, int i, bool detach = false);
+
+    void run_proc(p_void_pvoid proc, void *v, bool detach = false);
+
+    template<typename T>
+    void run_proc(T *obj, bool detach = false) {
+        if ( detach ) {
+            std::thread th(
+                &T::_proc, obj
+            );
+            th.detach();
+            return;
+        }
+
+        std::thread *t = new std::thread(
+            &T::_proc, obj
+        );
+        std::unique_lock<std::mutex> l(_mutex_threads);
+        _threads.push_back(t);
+
+    }
+
 
     void join();
 

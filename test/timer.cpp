@@ -25,9 +25,7 @@ int Timer::start() {
 
     _stop_flag = false;
 
-    RUN_TASK(std::function<void()>(
-        std::bind(&Timer::_proc_timer, this)
-    ));
+    RUN_PROC<Timer>( this );
 
     return 0;
 }
@@ -51,7 +49,7 @@ int Timer::add(const TimerEvent &te) {
     return 0;
 }
 
-void Timer::_proc_timer() {
+void Timer::_proc() {
     int span = 0;
     while ( !_stop_flag ) {
         std::unique_lock<std::mutex> l(_mutex_timer_events);

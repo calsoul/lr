@@ -15,7 +15,7 @@ void writer_1wnr(int i) {
 }
 
 
-void reader_1wnr() {
+void reader_1wnr(int i) {
     while ( "hello world !" ) {
         //std::this_thread::sleep_for(
         //    std::chrono::seconds(1)
@@ -32,15 +32,18 @@ int main(const int argc, const char **argv) {
 
     //for (int i = 0; i < 10; ++i) {
     int i = 0;
-    RUN_TASK(std::function<void(int)>(
-        std::bind(&writer_1wnr, std::placeholders::_1)
-    ), i);
+    RUN_PROC(writer_1wnr, i);
+
+    //RUN_TASK(std::function<void(int)>(
+    //    std::bind(&writer_1wnr, std::placeholders::_1)
+    //), i);
     //}
 
     for (int i = 0; i < 10; ++i) {
-        RUN_TASK(std::function<void()>(
-            &reader_1wnr
-        ));
+        RUN_PROC(reader_1wnr, i);
+        //RUN_TASK(std::function<void()>(
+        //    &reader_1wnr
+        //));
     }
 
 
