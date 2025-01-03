@@ -84,16 +84,16 @@ printf("[%d] put one bi\n", i);
 int main(const int argc, const char **argv) {
 
     for (int i = 0; i < 100; ++i ) {
-        RUN_TASK(std::function<void(int)>(
-            std::bind(&proc_put, std::placeholders::_1)
-        ), i);
+        RUN_PROC(
+            proc_put, i
+        );
     }
 
 
     for (int i = 0; i < 100; ++i) {
-        RUN_TASK(std::function<void(int)>(
-            std::bind(&proc_get, std::placeholders::_1)
-        ), i);
+        RUN_PROC(
+            proc_get, i
+        );
     }
 
     THREAD_MANAGER.join();

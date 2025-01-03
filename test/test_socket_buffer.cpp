@@ -20,7 +20,7 @@
 
 SocketBuffer sb;
 
-void writer() {
+void writer(int i) {
     char word[16] = {0};
     unsigned int counter = 0;
 
@@ -39,7 +39,7 @@ std::this_thread::sleep_for(
 }
 
 
-void reader() {
+void reader(int i) {
     char word[16] = {0};
     while (  "reader" ) {
         memset(word, 0x0, sizeof(word));
@@ -111,14 +111,12 @@ printf("%d get -[%s]\n",checker++,  word);
 }
 
 int main(const int argc, const char **argv ) {
-    RUN_TASK(std::function<void()>(
-        &writer
-    ));
+
+    RUN_PROC(writer, 0);
 
 
-    RUN_TASK(std::function<void()>(
-        &reader
-    ));
+    RUN_PROC(reader, 0);
+
     //RUN_TASK(std::function<void()>(
     //    &tester
     //));

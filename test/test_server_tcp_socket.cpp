@@ -234,13 +234,15 @@ printf("server listen on %s:%d\n", ai._ip.c_str(), ai._port);
         //    continue;
         //}
 
-        RUN_TASK(std::function<void(void *)>(
-            std::bind(&proc_recv, std::placeholders::_1)
-        ), (void *)s);
+        RUN_PROC(proc_recv, (void *)s);
+        //RUN_TASK(std::function<void(void *)>(
+        //    std::bind(&proc_recv, std::placeholders::_1)
+        //), (void *)s);
 
-        RUN_TASK(std::function<void(void *)>(
-            std::bind(&proc_send, std::placeholders::_1)
-        ), (void *)s);
+        RUN_PROC(proc_send, (void *)s);
+        //RUN_TASK(std::function<void(void *)>(
+        //    std::bind(&proc_send, std::placeholders::_1)
+        //), (void *)s);
     }
 
     THREAD_MANAGER.join();

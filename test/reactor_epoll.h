@@ -13,7 +13,7 @@ public:
     virtual ~ReactorEpoll();
 
 public:
-    void _proc_reactor();
+    void _proc();
     int r_proc();
     int w_proc();
 

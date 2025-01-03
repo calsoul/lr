@@ -1,7 +1,6 @@
 #ifndef _TIMER_H__
 #define _TIMER_H__
 
-#include <functional>
 #include <queue>
 
 #include <mutex>
@@ -9,16 +8,17 @@
 
 #include <chrono>
 
-//#define TIMER Timer::instance()
+typedef void (*TFUNC)();
+
 class TimerEvent {
     friend class TimerEventComparator;
 public:
     TimerEvent(): _time(0), _func(0) { }
-    TimerEvent(int t, std::function<void()> f): _time(t), _func(f) {}
+    TimerEvent(int t, TFUNC f): _time(t), _func(f) {}
 
     int _time;
 
-    std::function<void()> _func;
+    TFUNC _func;
 };
 
 class TimerEventComparator {
@@ -49,7 +49,7 @@ public:
     void stop();
 
 public:
-    void _proc_timer();
+    void _proc();
 
 private:
 

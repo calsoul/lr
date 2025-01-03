@@ -42,7 +42,7 @@ int main(const int argc, const char **argv) {
 
         timer.add(TimerEvent(
             time(0) + 5,
-            std::function<void()>(test_proc)
+            test_proc
         ));
 
     }
