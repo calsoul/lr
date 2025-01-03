@@ -4,21 +4,12 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include "plt/oth-inc.h"
+//#include "plt/oth-inc.h"
 
-#include "event_type.h"
-#include "event.h"
-#include "event_pool.h"
-#include "zlog.h"
-#include "left_object.h"
 #include "thread_manager.h"
 
-std::shared_ptr<Signals> Signals::_instance = std::make_shared<Signals>();
 bool Signals::_stop_flag = false;
-
-Signals::Signals() {
-  _stype = EVENT_TYPE_SIGNAL;
-}
+Handler Signals::_handler = NULL;
 
 int Signals::init() {
 
@@ -43,60 +34,47 @@ int Signals::init() {
   //set_signal_handler(SIGBREAK , &Signals::signal_handler);
   //set_signal_handler(SIGABRT,  &Signals::signal_handler);
   
-  _r_event_pool_id = EventPool::reserve_event_queue();
-  _thread_group_id = PTHREADMANAGER->reserve_thread_group();
-  PTHREADMANAGER->start(_thread_group_id, 1);
+  //_r_event_pool_id = EventPool::reserve_event_queue();
+  //_thread_group_id = PTHREADMANAGER->reserve_thread_group();
+  //PTHREADMANAGER->start(_thread_group_id, 1);
   // this thread used by dispatcher ..
 
   return 0;
 }
 
-void Signals::signal_handler(int sig) {
-  Event::ptr e = MAKE_SHARED(Event);
+int Signals::start() {
+    RUN_TASK(
+        std::bind(
+            &Signals::_proc_signal,
+            std::placeholders::_1
+        )
+    );
 
-  if (Signals::_stop_flag) {
-    ZLOG_ERROR(__FILE__, __LINE__, __func__, "caught signal:", sig);
-    return ;
-  }
+    return 0;
+}
 
-  switch (sig) {
-  case SIGBUS:
-    ZLOG_WARN(__FILE__, __LINE__, __func__, "SIGBUS ", sig, " caught");
-    dump_stack();
-  break;
-  case SIGSEGV:
-    ZLOG_WARN(__FILE__, __LINE__, __func__, "SIGSEGV ", sig, " caught");
-    dump_stack();
-  break;
-  case SIGQUIT:
-    ZLOG_WARN(__FILE__, __LINE__, __func__, "SIGQUIT ", sig, " caught");
-    dump_stack();
-  break;
-  case SIGHUP:
-    e->_stype = EVENT_TYPE_SIGNAL_SIGHUP;
-    ZLOG_WARN(__FILE__, __LINE__, __func__, "SIGHUP ", sig, " caught");
-  break;
-  case SIGKILL:
-    e->_stype = EVENT_TYPE_SIGNAL_SIGKILL;
-    ZLOG_WARN(__FILE__, __LINE__, __func__, "SIGKILL ", sig, " caught");
-  break;
-  case SIGINT:
-    e->_stype = EVENT_TYPE_SIGNAL_SIGINT;
-    ZLOG_WARN(__FILE__, __LINE__, __func__, "SIGINT ", sig, " caught");
-  break;
+void Signals::_proc_signal(int sig) {
+    while ( !Signals::_stop_flag ) {
+        switch ( sig ) {
+        case SIGBUS:
+        case SIGSEGV:
+        case SIGQUIT:
+        case SIGHUP:
+        case SIGKILL:
+        case SIGINT:
+        case SIGALRM:
+            _handler->process(ReactorEvent(
+                EV_SIGNAL, (void *)sig
+            ));
+        break;
 
-  case SIGALRM:
-    e->_stype = EVENT_TYPE_SIGNAL_SIGALRM;
-    ZLOG_WARN(__FILE__, __LINE__, __func__, "SIGALRM ", sig, " caught");
-  break;
-
-  default:
-    ZLOG_ERROR(__FILE__, __LINE__, __func__, "unknown sig caught ", sig);
-  }
-
-  ADD_EVENT(PSIGNALS->_r_event_pool_id, e);
-
-  return ;
+        default:
+            printf("%s %d %s %s [%d]\n",
+                __FILE__, __LINE__, __func__, 
+                "unknown sig", sig
+            );
+        }
+    }
 }
 
 void Signals::dump_stack(void) {
@@ -111,15 +89,17 @@ void Signals::dump_stack(void) {
 
 
 void Signals::clean_up(void) {
-  ZLOG_WARN(__FILE__, __LINE__, __func__, "server stopped");
-  /* Do any cleaning up chores here */
-
-  return ;
+    /* Do any cleaning up chores here */
+    printf("%s %d %s %s\n",
+        __FILE__, __LINE__, __func__,
+        ""
+    );
+    return ;
 }
 
 void Signals::stop() {
   ZLOG_WARN(__FILE__, __LINE__, __func__);
+  
   Signals::_stop_flag = true;
-
 }
 

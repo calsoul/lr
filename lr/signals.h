@@ -1,33 +1,34 @@
 #ifndef _SIGNALS_H__
 #define _SIGNALS_H__
 
-#include <memory>
+#include <conditional_variable>
+#include <mutex>
 
-#include "event.h"
+#include <list>
 
-#define PSIGNALS Signals::_instance
+#include "reactor_event.h"
 
-class Signals: public ESource {
+class Handler;
+class Signals {
 public:
+  static int init();
 
-  Signals();
-  virtual ~Signals() {}
+  static int start();
 
-  int init();
+  static void _proc_signal(int sig);
 
-  static void signal_handler(int sig);
   static void dump_stack(void);
   static void clean_up(void);
 
-  void stop();
+  static void stop();
 public:
-  static std::shared_ptr<Signals> _instance;
+  static Handler *_handler;
+
 private:
   static bool _stop_flag;
-
-public:
-  int _r_event_pool_id;
-  int _thread_group_id;
+  static std::conditional_variable _cv_signal;
+  static std::mutex _mutex_signal
+  static std::list<ReactorEvent> _ev_signal;
 };
 
 #endif //_SIGNALS_H__

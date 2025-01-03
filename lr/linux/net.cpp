@@ -294,8 +294,8 @@ int socket_listen(int socket, void *param) {
 
 int _tcp_socket_recv(int socket, struct socket_recv_param *srp) {
   int ret;
-  while ( true ) {
-    ret = ::recv(socket, srp->buf, srp->blen, 0);
+  while ( 1 ) {
+    ret = recv(socket, srp->buf, srp->blen, 0);
     if ( ret < 0 ) {
       if ( errno == EINTR ) {
         continue;
@@ -351,17 +351,19 @@ int socket_recv(int socket, void *param) {
 
 int _tcp_socket_send(int socket, struct socket_send_param *ssp) {
   int ret;
-  while ( true ) {
-    ret = ::send(socket, ssp->buf, ssp->blen, MSG_NOSIGNAL);
+  int sent = 0;
+  while ( sent < ssp->blen ) {
+    ret = send(socket, ssp->buf + sent, ssp->blen - sent, MSG_NOSIGNAL);
     if ( ret < 0 ) {
       if (errno == EINTR) {
         continue;
       }
       return -1;
     }
-    break;
+
+    sent += ret;
   }
-  return ret;
+  return sent;
 }
 
 int _udp_socket_send(int socket, struct socket_send_param *ssp) {
@@ -371,7 +373,7 @@ int _udp_socket_send(int socket, struct socket_send_param *ssp) {
   addrin.sin_port = htons(ssp->port);
   int ret;
   while ( true ) {
-    ret = ::sendto(socket, ssp->buf, ssp->blen, MSG_NOSIGNAL, (struct sockaddr*)&addrin, sizeof(addrin));
+    ret = sendto(socket, ssp->buf, ssp->blen, MSG_NOSIGNAL, (struct sockaddr*)&addrin, sizeof(addrin));
     if ( ret < 0 ) {
       if (errno == EINTR) {
         continue;

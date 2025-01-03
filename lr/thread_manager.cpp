@@ -1,137 +1,71 @@
 #include "thread_manager.h"
 
-#include "plt/type-inc.h"
+ThreadManager  THREAD_MANAGER;
 
-#include "configure.h"
-#include "event_type.h"
+int ThreadManager::run_task(std::function<void()> func, bool detach) {
+    //if ( _stop_flag ) {
+    //    printf("%s %d %s %s\n",
+    //        __FILE__, __LINE__, __func__,
+    //        "thead manager has stopped."
+    //    );
+    //    return -1;
+    //}
 
-std::shared_ptr<ThreadManager> ThreadManager::_instance = std::make_shared<ThreadManager>();
-
-ThreadGroup::ThreadGroup() {
-}
-
-ThreadGroup::ThreadGroup(EVENTID tg_type) {
-  _tg_type = tg_type;
-}
-
-int ThreadGroup::start(int thread_num) {
-  _stop_flag = false;
-  _threads.clear();
-  _expect_thread_num = thread_num;
-
-  for (int i = 0; i < _expect_thread_num; ++i) {
-    std::shared_ptr<std::thread> th = std::make_shared<std::thread>(std::bind(&ThreadGroup::_thread_proc, this));
-    th->detach();
-
-    _threads.emplace_back(th);
-  }
-
-  return 0;
-}
-
-int ThreadGroup::add_task(const std::shared_ptr<Task> t) {
-  {
-    std::lock_guard<std::mutex> l(_mutex_tasks);
-
-    if (_stop_flag) {
-      ZLOG_WARN(__FILE__, __LINE__, __func__, "thread group stoped", _tg_type);
-      return -1;
+    if ( detach ) {
+        std::thread th(func);
+        th.detach();
+        return 0;
     }
- 
-    _tasks.emplace(t);
-  }
 
-  _cv_tasks.notify_one();
+    std::thread * t = new std::thread(func);
 
-  return 0;
+    std::unique_lock<std::mutex> l(_mutex_threads);
+    _threads.push_back(t);
+
+    return 0;
 }
 
-void ThreadGroup::stop() {
-  _stop_flag = true;
-  _cv_tasks.notify_all();
+int ThreadManager::run_task(std::function<void(int i)> func, int i, bool detach) {
+    if ( detach ) {
+        std::thread th(func, i);
+        th.detach();
+        return 0;
+    }
+
+    std::thread * t = new std::thread(func, i);
+
+    std::unique_lock<std::mutex> l(_mutex_threads);
+    _threads.push_back(t);
+
+    return 0;
 }
 
-void ThreadGroup::_thread_proc() {
-  while ( !_stop_flag ) {
-    ZLOG_DEBUG(__FILE__, __LINE__, __func__);
-    Task::ptr t;
 
+int ThreadManager::run_task(std::function<void(void *)> func, void *v, bool detach) {
+    if ( detach ) {
+        std::thread th(func, v);
+        th.detach();
+        return 0;
+    }
+
+    std::thread * t = new std::thread(func, v);
+
+    std::unique_lock<std::mutex> l(_mutex_threads);
+    _threads.push_back(t);
+
+    return 0;
+}
+
+void ThreadManager::join() {
+    std::list<std::thread *> tt;
     {
-      std::unique_lock<std::mutex> lock(this->_mutex_tasks);
-
-      _cv_tasks.wait(lock, [this] {
-        return this->_stop_flag || !this->_tasks.empty();
-      });
-
-      if (_stop_flag) {
-        ZLOG_WARN(__FILE__, __LINE__, __func__, "_stop_flag", _stop_flag);
-        return ;
-      }
-
-      if (_tasks.empty()) {
-        continue;
-      }
-
-      t = std::move(_tasks.front());
-      _tasks.pop();
+        std::unique_lock<std::mutex> l(_mutex_threads);
+        tt = _threads;
     }
 
-    (*t)();
-  }
-}
+    for (std::list<std::thread *>::iterator it = tt.begin();
+        it != tt.end(); ++it ) {
 
-ThreadManager::ThreadManager() {
-  _thread_group_id = 0;
-}
-
-int ThreadManager::init() {
-  _thread_groups.resize(MAX_THREAD_GROUP_NUM);
-  _thread_groups.shrink_to_fit();
- 
-  return 0;
-}
-
-int ThreadManager::reserve_thread_group() {
-  _thread_groups[_thread_group_id] = std::make_shared<ThreadGroup>();
-
-  ++_thread_group_id;
-
-  return _thread_group_id;
-}
-
-
-int ThreadManager::start(int thread_group_id, int th_num) {
-  return _thread_groups[--thread_group_id]->start(th_num);
-}
-
-void ThreadManager::stop() {
-  for (int i = 0; i < _thread_group_id; ++i) {
-    if (_thread_groups[i]) {
-      _thread_groups[i]->stop();
+        (*it)->join();
     }
-  }
 }
-
-ThreadManager::~ThreadManager() {
-  //{
-  //  std::unique_lock<std::mutex> lock(_mutex_tasks);
-  //  _stop_flag = true;
-  //}
-
-  //_cv_tasks.notify_all();
-
-  //for (std::thread &t: _threads) {
-  //  t.join();
-  //}
-}
-
-int ThreadManager::run_task(std::shared_ptr<Task> t) {
-  std::shared_ptr<std::thread> th = std::make_shared<std::thread>([t] { (*t)();});
-  th->detach();
-  return 0;
-}
-
-int ThreadManager::run_task(int thread_group_id, std::shared_ptr<Task> t) {
-  return _thread_groups[--thread_group_id]->add_task(t);
-}
-

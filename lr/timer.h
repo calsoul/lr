@@ -1,56 +1,71 @@
 #ifndef _TIMER_H__
 #define _TIMER_H__
 
-#include <memory>
-#include <map>
+#include <functional>
+#include <queue>
+
 #include <mutex>
 #include <condition_variable>
+
 #include <chrono>
 
-#include "event.h"
-#include "event_type.h"
+//#define TIMER Timer::instance()
 
-#define PTIMER Timer::_instance
-
-class Event;
-class Timer :public ESource {
+class TimerEvent {
+    friend class TimerEventComparator;
 public:
-  Timer() {
-    _stype = EVENT_TYPE_TIMER;
-    _stop_flag = false;
-    _current_time = 0;
-    _r_event_pool_id = 0;
-    _timer_thread_group_id = 0;
-  }
+    TimerEvent(): _time(0), _func(0) { }
+    TimerEvent(int t, std::function<void()> f): _time(t), _func(f) {}
 
-  virtual ~Timer() { }
+    int _time;
 
-  int init();
+    std::function<void()> _func;
+};
 
-  int start();
-
-  int add(int, std::shared_ptr<Event>);
-
-  void stop();
+class TimerEventComparator {
 public:
-  void _timer_thread();
+    bool operator () (const TimerEvent &lhs, const TimerEvent &rhs) {
+        return lhs._time > rhs._time;
+    }
+};
+
+class Timer {
+public:
+    Timer();
+
+    Timer(const Timer &) = delete;
+    Timer(const Timer &&) = delete;
+    Timer &operator=(const Timer &) = delete;
+
+
+
+    virtual ~Timer() { }
+
+    int init();
+
+    int start();
+
+    int add(const TimerEvent &te);
+
+    void stop();
+
+public:
+    void _proc_timer();
 
 private:
-  typedef std::map<int, std::shared_ptr<Event>, std::less<int>> TimerEventContainer;
 
-  TimerEventContainer _timer_events;
-  std::condition_variable _cv_timer_events;
-  std::mutex _mutex_timer_events;
-  int _current_time;
+    typedef std::priority_queue<TimerEvent, std::vector<TimerEvent>, TimerEventComparator> TimerEventContainer;
 
-  //int _timer_fd;
-  bool _stop_flag;
+    TimerEventContainer _timer_events;
 
-  int _timer_thread_group_id;
-public:
-  int _r_event_pool_id;
-public:
-  static std::shared_ptr<Timer> _instance;
+    std::condition_variable _cv_timer_events;
+    std::mutex _mutex_timer_events;
+
+    int _current_time;
+
+    bool _stop_flag;
 };
+
+extern Timer TIMER;
 
 #endif//_TIMER_H__
