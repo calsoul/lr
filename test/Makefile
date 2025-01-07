@@ -420,6 +420,36 @@ line_configure.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestLineEpoll.dir/build.make CMakeFiles/TestLineEpoll.dir/line_configure.cpp.s
 .PHONY : line_configure.cpp.s
 
+lr_socket.o: lr_socket.cpp.o
+.PHONY : lr_socket.o
+
+# target to build an object file
+lr_socket.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketServer.dir/build.make CMakeFiles/TestTcpSocketServer.dir/lr_socket.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketClient.dir/build.make CMakeFiles/TestTcpSocketClient.dir/lr_socket.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestLineEpoll.dir/build.make CMakeFiles/TestLineEpoll.dir/lr_socket.cpp.o
+.PHONY : lr_socket.cpp.o
+
+lr_socket.i: lr_socket.cpp.i
+.PHONY : lr_socket.i
+
+# target to preprocess a source file
+lr_socket.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketServer.dir/build.make CMakeFiles/TestTcpSocketServer.dir/lr_socket.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketClient.dir/build.make CMakeFiles/TestTcpSocketClient.dir/lr_socket.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestLineEpoll.dir/build.make CMakeFiles/TestLineEpoll.dir/lr_socket.cpp.i
+.PHONY : lr_socket.cpp.i
+
+lr_socket.s: lr_socket.cpp.s
+.PHONY : lr_socket.s
+
+# target to generate assembly for a file
+lr_socket.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketServer.dir/build.make CMakeFiles/TestTcpSocketServer.dir/lr_socket.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketClient.dir/build.make CMakeFiles/TestTcpSocketClient.dir/lr_socket.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestLineEpoll.dir/build.make CMakeFiles/TestLineEpoll.dir/lr_socket.cpp.s
+.PHONY : lr_socket.cpp.s
+
 plt/net-src.o: plt/net-src.cpp.o
 .PHONY : plt/net-src.o
 
@@ -503,36 +533,6 @@ reactor_event_queue.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestEndianEventQueue.dir/build.make CMakeFiles/TestEndianEventQueue.dir/reactor_event_queue.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestLineEpoll.dir/build.make CMakeFiles/TestLineEpoll.dir/reactor_event_queue.cpp.s
 .PHONY : reactor_event_queue.cpp.s
-
-socket.o: socket.cpp.o
-.PHONY : socket.o
-
-# target to build an object file
-socket.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketServer.dir/build.make CMakeFiles/TestTcpSocketServer.dir/socket.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketClient.dir/build.make CMakeFiles/TestTcpSocketClient.dir/socket.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestLineEpoll.dir/build.make CMakeFiles/TestLineEpoll.dir/socket.cpp.o
-.PHONY : socket.cpp.o
-
-socket.i: socket.cpp.i
-.PHONY : socket.i
-
-# target to preprocess a source file
-socket.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketServer.dir/build.make CMakeFiles/TestTcpSocketServer.dir/socket.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketClient.dir/build.make CMakeFiles/TestTcpSocketClient.dir/socket.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestLineEpoll.dir/build.make CMakeFiles/TestLineEpoll.dir/socket.cpp.i
-.PHONY : socket.cpp.i
-
-socket.s: socket.cpp.s
-.PHONY : socket.s
-
-# target to generate assembly for a file
-socket.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketServer.dir/build.make CMakeFiles/TestTcpSocketServer.dir/socket.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestTcpSocketClient.dir/build.make CMakeFiles/TestTcpSocketClient.dir/socket.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/TestLineEpoll.dir/build.make CMakeFiles/TestLineEpoll.dir/socket.cpp.s
-.PHONY : socket.cpp.s
 
 socket_buffer.o: socket_buffer.cpp.o
 .PHONY : socket_buffer.o
@@ -945,6 +945,9 @@ help:
 	@echo "... line_configure.o"
 	@echo "... line_configure.i"
 	@echo "... line_configure.s"
+	@echo "... lr_socket.o"
+	@echo "... lr_socket.i"
+	@echo "... lr_socket.s"
 	@echo "... plt/net-src.o"
 	@echo "... plt/net-src.i"
 	@echo "... plt/net-src.s"
@@ -954,9 +957,6 @@ help:
 	@echo "... reactor_event_queue.o"
 	@echo "... reactor_event_queue.i"
 	@echo "... reactor_event_queue.s"
-	@echo "... socket.o"
-	@echo "... socket.i"
-	@echo "... socket.s"
 	@echo "... socket_buffer.o"
 	@echo "... socket_buffer.i"
 	@echo "... socket_buffer.s"

@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 
+
+#include <iostream>
+
 #define DEFAULT_LEFT_THREAD_NUMBER 3
 #define DEFAULT_RIGHT_THREAD_NUMBER 3
 #define TIME_ENABLE 1
@@ -29,7 +32,6 @@ int LineConfigure::load_line_conf(const char *fname) {
             __FILE__, __func__, __LINE__,
             strerror(errno)
         );
-        fclose(file);
         return -1;
     }
 
@@ -42,6 +44,10 @@ int LineConfigure::load_line_conf(const char *fname) {
         if ( len < 0 ) {
             break;
         }
+
+        lineptr = drop_space(lineptr, len);
+//std::cout << lineptr << std::endl;
+
         if ( inter_one_line(lineptr, len, kv_conf) < 0 ) {
             fclose(file);
             return -1;
@@ -140,13 +146,43 @@ int LineConfigure::load_line_conf(const char *fname) {
     return 0;
 }
 
+char *LineConfigure::drop_space(char *line, int len) {
+    char *space = line;
+    char *head = 0;
+    while ( "zhao gong zuo 8 ge yue le ..." ) {
+        while ( (*space) && (*space != ' ') ) {
+            ++space;
+        }
+        if ( !(*space) ) {
+            break;
+        }
+
+        if ( !head ) {
+            head = space;
+        }
+        while ( (*head) && (*head == ' ') ) {
+            ++head;
+        }
+
+        if ( !(*head) ) {
+            *space = 0;
+            break;
+        }
+
+        *space = *head;
+        *head = ' ';
+    }
+
+    return line;
+}
+
 int LineConfigure::inter_one_line(const char *line, ssize_t len, std::map<std::string, std::string> &kv_map) {
     const char *beg = line;
     ssize_t i = 0;
 
-    while ( i < len && ' ' == *(beg + i)) {
-        ++i;
-    }
+    //while ( i < len && ' ' == *(beg + i)) {
+    //    ++i;
+    //}
 
     if ( *(beg + i) == '\n' ) {
         return 0;
@@ -209,9 +245,9 @@ int LineConfigure::inter_one_line(const char *line, ssize_t len, std::map<std::s
 
     ++i;
 
-    while ( i < len && ' ' == *(beg + i)) {
-        ++i;
-    }
+    //while ( i < len && ' ' == *(beg + i)) {
+    //    ++i;
+    //}
 
     std::string value;
     while ( 1 ) {

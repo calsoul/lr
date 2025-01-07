@@ -5,7 +5,7 @@
 #include "reactor.h"
 #include "reactor_event.h"
 #include "reactor_epoll.h"
-#include "socket.h"
+#include "lr_socket.h"
 #include "line_configure.h"
 #include "thread_manager.h"
 

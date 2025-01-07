@@ -1,0 +1,12 @@
+/home/debian/lr/test/CMakeFiles/TestTimer.dir
+/home/debian/lr/test/CMakeFiles/TestLineConfigure.dir
+/home/debian/lr/test/CMakeFiles/TestCachePool.dir
+/home/debian/lr/test/CMakeFiles/TestBufferItem.dir
+/home/debian/lr/test/CMakeFiles/TestSocketBuffer.dir
+/home/debian/lr/test/CMakeFiles/TestReactorEventQueue.dir
+/home/debian/lr/test/CMakeFiles/TestEndianEventQueue.dir
+/home/debian/lr/test/CMakeFiles/TestTcpSocketServer.dir
+/home/debian/lr/test/CMakeFiles/TestTcpSocketClient.dir
+/home/debian/lr/test/CMakeFiles/TestLineEpoll.dir
+/home/debian/lr/test/CMakeFiles/edit_cache.dir
+/home/debian/lr/test/CMakeFiles/rebuild_cache.dir

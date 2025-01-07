@@ -5,7 +5,7 @@
 #include "line.h"
 #include "reactor.h"
 #include "reactor_event.h"
-#include "socket.h"
+#include "lr_socket.h"
 
 int Handler::handle(ReactorEvent re) {
 //printf("%s %s %d %d %d\n",

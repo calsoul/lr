@@ -108,8 +108,8 @@ set(TCP_SOCKET_SRC_SERVER_SRC
     ${PROJECT_SOURCE_DIR}/buffer_item.h
     ${PROJECT_SOURCE_DIR}/socket_buffer.h
     ${PROJECT_SOURCE_DIR}/socket_buffer.cpp
-    ${PROJECT_SOURCE_DIR}/socket.h
-    ${PROJECT_SOURCE_DIR}/socket.cpp
+    ${PROJECT_SOURCE_DIR}/lr_socket.h
+    ${PROJECT_SOURCE_DIR}/lr_socket.cpp
     ${PROJECT_SOURCE_DIR}/tcp_socket.h
     ${PROJECT_SOURCE_DIR}/tcp_socket.cpp
     ${PROJECT_SOURCE_DIR}/bi_cache_pool.h
@@ -133,8 +133,8 @@ set(TCP_SOCKET_SRC_CLIENT_SRC
     ${PROJECT_SOURCE_DIR}/buffer_item.h
     ${PROJECT_SOURCE_DIR}/socket_buffer.h
     ${PROJECT_SOURCE_DIR}/socket_buffer.cpp
-    ${PROJECT_SOURCE_DIR}/socket.h
-    ${PROJECT_SOURCE_DIR}/socket.cpp
+    ${PROJECT_SOURCE_DIR}/lr_socket.h
+    ${PROJECT_SOURCE_DIR}/lr_socket.cpp
     ${PROJECT_SOURCE_DIR}/tcp_socket.h
     ${PROJECT_SOURCE_DIR}/tcp_socket.cpp
     ${PROJECT_SOURCE_DIR}/bi_cache_pool.h
@@ -158,8 +158,8 @@ set(TEST_LINE_EPOLL_SRC
     ${PROJECT_SOURCE_DIR}/buffer_item.h
     ${PROJECT_SOURCE_DIR}/socket_buffer.h
     ${PROJECT_SOURCE_DIR}/socket_buffer.cpp
-    ${PROJECT_SOURCE_DIR}/socket.h
-    ${PROJECT_SOURCE_DIR}/socket.cpp
+    ${PROJECT_SOURCE_DIR}/lr_socket.h
+    ${PROJECT_SOURCE_DIR}/lr_socket.cpp
     ${PROJECT_SOURCE_DIR}/tcp_socket.h
     ${PROJECT_SOURCE_DIR}/tcp_socket.cpp
     ${PROJECT_SOURCE_DIR}/bi_cache_pool.h

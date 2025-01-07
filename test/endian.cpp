@@ -350,3 +350,13 @@ void Endian::endian_except(Socket *s) {
     _reactor->add_socket(s, EV_CLOSE);
 }
 
+Socket *Endian::new_client() {
+
+    //Socket *s = 0;
+    //s->init(_i_main_socket->_addr);
+    //s->connect();
+    //return s;
+
+    return 0;
+
+}

@@ -4,7 +4,7 @@
 #include "reactor_event.h"
 
 //should be 2 ^n
-#define ENDIAN_CACHE_SIZE 8
+#define ENDIAN_CACHE_SIZE 1024
 
 class EndianEventQueue {
 public:

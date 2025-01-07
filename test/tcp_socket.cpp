@@ -66,7 +66,7 @@ int TcpSocket::bind() {
     if ( ret < 0 ) {
         printf("%s %s %d %s: %s:%d\n",
             __FILE__, __func__, __LINE__,
-            "error socket_bind.", sbp.ip, sbp.port
+            strerror(errno), sbp.ip, sbp.port
         );
         return -1;
     }

@@ -1,0 +1,1 @@
+g++ -rdynamic CMakeFiles/TestLineConfigure.dir/line_configure.cpp.o CMakeFiles/TestLineConfigure.dir/test_line_configure.cpp.o -o TestLineConfigure 

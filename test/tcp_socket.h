@@ -1,7 +1,7 @@
 #ifndef _TCP_SOCKET_H__
 #define _TCP_SOCKET_H__
 
-#include "socket.h"
+#include "lr_socket.h"
 
 class AddrInfo;
 class TcpSocket: public Socket {

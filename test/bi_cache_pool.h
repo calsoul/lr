@@ -7,8 +7,7 @@
 #include "buffer_item.h"
 
 // BI_CACHE_POOL_SIZE should equal to 2^n <= 2 ^16
-#define BI_CACHE_POOL_SIZE (1024 * 4)
-
+#define BI_CACHE_POOL_SIZE (1024)
 
 class BICachePool {
 public:

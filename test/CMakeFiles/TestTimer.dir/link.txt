@@ -1,0 +1,1 @@
+g++ -rdynamic CMakeFiles/TestTimer.dir/timer.cpp.o CMakeFiles/TestTimer.dir/thread_manager.cpp.o CMakeFiles/TestTimer.dir/line_configure.cpp.o CMakeFiles/TestTimer.dir/test_timer.cpp.o -o TestTimer 

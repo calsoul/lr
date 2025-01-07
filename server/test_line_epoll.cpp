@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "handler.h"
-#include "line.h"
+#include "lr/handler.h"
+#include "lr/line.h"
 
 int main(const int argc, const char **argv) {
     Line l;

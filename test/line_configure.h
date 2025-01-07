@@ -31,6 +31,7 @@ public:
 private:
     int inter_one_line(const char *line, ssize_t len, std::map<std::string, std::string> &kv_map);
     int inter_addrinfo(const char *line, AddrInfo &addr);
+    char *drop_space(char *line, int len);
 
     bool valid_char(char c);
     bool valid_ip(const char *ip);

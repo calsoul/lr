@@ -1,0 +1,1 @@
+g++ -rdynamic CMakeFiles/TestCachePool.dir/thread_manager.cpp.o CMakeFiles/TestCachePool.dir/bi_cache_pool.cpp.o CMakeFiles/TestCachePool.dir/test_cache_pool.cpp.o -o TestCachePool 

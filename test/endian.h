@@ -4,7 +4,7 @@
 #include <condition_variable>
 #include <mutex>
 
-#include "socket.h"
+#include "lr_socket.h"
 #include "reactor_event.h"
 #include "endian_event_queue.h"
 
@@ -31,12 +31,16 @@ public:
     int fire();
 
     int stop();
-  
+
+    // left.  
     void endian_accept(Socket *s);
     void endian_recv(Socket *s);
     void endian_write(Socket *s);
     void endian_close(Socket *s);
     void endian_except(Socket *s);
+
+    //right.
+    Socket *new_client();
 
 private:
     int l_main_socket_init();

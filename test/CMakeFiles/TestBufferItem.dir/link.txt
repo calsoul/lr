@@ -1,0 +1,1 @@
+g++ -rdynamic CMakeFiles/TestBufferItem.dir/test_buffer_item.cpp.o -o TestBufferItem 

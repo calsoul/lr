@@ -10,7 +10,7 @@
 #include <functional>
 
 #include "line.h"
-#include "socket.h"
+#include "lr_socket.h"
 #include "thread_manager.h"
 
 ReactorEpoll::ReactorEpoll() {
@@ -130,7 +130,7 @@ int ReactorEpoll::r_proc() {
     );
 
     if ( ret < 0 ) {
-        if ( ret == EINTR ) {
+        if ( errno == EINTR ) {
             printf("%s %d %s %s [%d]\n",
                 __FILE__, __LINE__, __func__,
                 strerror(errno), ret
@@ -174,7 +174,7 @@ int ReactorEpoll::w_proc() {
     );
 
     if ( ret < 0 ) {
-        if ( ret == EINTR ) {
+        if ( errno == EINTR ) {
             printf("%s %d %s %s [%d]\n",
                 __FILE__, __LINE__, __func__,
                 strerror(errno), ret
